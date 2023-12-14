@@ -1,3 +1,3 @@
 # face-analyzer
 
-_Check the [related documentation](https://swiss-ai-center.github.io/swiss-ai-center/reference/face-analyzer) for more information._
+_Check the [related documentation](https://docs.swiss-ai-center.ch/reference/services/face-analyzer) for more information._
