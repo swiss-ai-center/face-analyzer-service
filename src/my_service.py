@@ -32,6 +32,7 @@ Analyzes the faces in images.
 api_title = "Face Analyzer API."
 version = "1.0.0"
 
+
 class MyService(Service):
     """
     Face analyzer service model
