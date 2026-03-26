@@ -54,7 +54,26 @@ class MyService(Service):
                 FieldDescription(name="image", type=[FieldDescriptionType.IMAGE_PNG, FieldDescriptionType.IMAGE_JPEG]),
             ],
             data_out_fields=[
-                FieldDescription(name="result", type=[FieldDescriptionType.APPLICATION_JSON]),
+                FieldDescription(
+                    name="result",
+                    type=[FieldDescriptionType.APPLICATION_JSON],
+                    format_hint=[
+                        {
+                            "age": 23,
+                            "region": { "x": 100, "y": 100, "w": 200, "h": 200,
+                                        "left_eye": [ 150, 150 ],
+                                        "right_eye": [ 250, 150 ],
+                                        },
+                            "face_confidence": 1.0,
+                            "gender": { "Woman": 0.02, "Man": 99.9 },
+                            "dominant_gender": "Man",
+                            "race": { "asian": 97.6, "indian": 1.3, "black": 0.01, "white": 0.1, "middle eastern": 0.0008, "latino hispanic": 0.9 },
+                            "dominant_race": "asian",
+                            "emotion": { "angry": 0.0001, "disgust": 1.94e-05, "fear": 0.001, "happy": 98.7, "sad": 0.01, "surprise": 0.0001, "neutral": 1.1 },
+                            "dominant_emotion": "happy"
+                        },
+                    ]
+                ),
             ],
             tags=[
                 ExecutionUnitTag(
