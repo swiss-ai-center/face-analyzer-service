@@ -11,7 +11,6 @@ from common_code.storage.service import StorageService
 from common_code.tasks.service import TasksService
 from common_code.service.models import Service
 
-
 # Import the service defined in the other file
 from my_service import MyService
 
@@ -52,12 +51,13 @@ async def lifespan(app: FastAPI):
                 if not announced:
                     time.sleep(settings.engine_announce_retry_delay)
                     if retries == 0:
-                        logger.warning(f"Aborting service announcement after "
-                                       f"{settings.engine_announce_retries} retries")
+                        logger.warning(
+                            f"Aborting service announcement after " f"{settings.engine_announce_retries} retries"
+                        )
 
     async def run_heartbeat(my_service: Service, interval: int = 30):
         # Get interval from settings or default to 30 seconds
-        interval = getattr(settings, 'heartbeat_interval', interval)
+        interval = getattr(settings, "heartbeat_interval", interval)
 
         while True:
             # Wait for the defined interval before sending the next ping

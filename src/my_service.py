@@ -5,6 +5,7 @@ from common_code.service.enums import ServiceStatus
 from common_code.common.enums import FieldDescriptionType, ExecutionUnitTagName, ExecutionUnitTagAcronym
 from common_code.common.models import FieldDescription, ExecutionUnitTag
 from common_code.tasks.models import TaskData
+
 # Imports required by the service's model
 import io
 import json
@@ -60,25 +61,43 @@ class MyService(Service):
                     format_hint=[
                         {
                             "age": 23,
-                            "region": { "x": 100, "y": 100, "w": 200, "h": 200,
-                                        "left_eye": [ 150, 150 ],
-                                        "right_eye": [ 250, 150 ],
-                                        },
+                            "region": {
+                                "x": 100,
+                                "y": 100,
+                                "w": 200,
+                                "h": 200,
+                                "left_eye": [150, 150],
+                                "right_eye": [250, 150],
+                            },
                             "face_confidence": 1.0,
-                            "gender": { "Woman": 0.02, "Man": 99.9 },
+                            "gender": {"Woman": 0.02, "Man": 99.9},
                             "dominant_gender": "Man",
-                            "race": { "asian": 97.6, "indian": 1.3, "black": 0.01, "white": 0.1, "middle eastern": 0.0008, "latino hispanic": 0.9 },
+                            "race": {
+                                "asian": 97.6,
+                                "indian": 1.3,
+                                "black": 0.01,
+                                "white": 0.1,
+                                "middle eastern": 0.0008,
+                                "latino hispanic": 0.9,
+                            },
                             "dominant_race": "asian",
-                            "emotion": { "angry": 0.0001, "disgust": 1.94e-05, "fear": 0.001, "happy": 98.7, "sad": 0.01, "surprise": 0.0001, "neutral": 1.1 },
-                            "dominant_emotion": "happy"
+                            "emotion": {
+                                "angry": 0.0001,
+                                "disgust": 1.94e-05,
+                                "fear": 0.001,
+                                "happy": 98.7,
+                                "sad": 0.01,
+                                "surprise": 0.0001,
+                                "neutral": 1.1,
+                            },
+                            "dominant_emotion": "happy",
                         },
-                    ]
+                    ],
                 ),
             ],
             tags=[
                 ExecutionUnitTag(
-                    name=ExecutionUnitTagName.IMAGE_RECOGNITION,
-                    acronym=ExecutionUnitTagAcronym.IMAGE_RECOGNITION
+                    name=ExecutionUnitTagName.IMAGE_RECOGNITION, acronym=ExecutionUnitTagAcronym.IMAGE_RECOGNITION
                 ),
             ],
             has_ai=True,
@@ -94,14 +113,9 @@ class MyService(Service):
         img = np.array(img_pil)
         diagnos = DeepFace.analyze(
             img_path=img,
-            actions=['age', 'gender', 'race', 'emotion'],
+            actions=["age", "gender", "race", "emotion"],
             enforce_detection=True,
             detector_backend="retinaface",
         )
 
-        return {
-            "result": TaskData(
-                data=json.dumps(diagnos),
-                type=FieldDescriptionType.APPLICATION_JSON
-            )
-        }
+        return {"result": TaskData(data=json.dumps(diagnos), type=FieldDescriptionType.APPLICATION_JSON)}
