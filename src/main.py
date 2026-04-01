@@ -5,7 +5,6 @@ from common_code.service.controller import router as service_router
 from common_code.tasks.controller import router as tasks_router
 from utils import lifespan
 from my_service import api_description, api_title, version
-
 app = FastAPI(
     lifespan=lifespan,
     title=api_title,
