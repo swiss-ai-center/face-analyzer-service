@@ -2,7 +2,7 @@
 name = "face-analyzer"
 version = "1.0.0"
 
-requires-python = "==3.10"
+requires-python = ">=3.10"
 dependencies = [
     "common-code[test] @ git+https://github.com/swiss-ai-center/common-code.git@main",
     "deepface==0.0.89",
