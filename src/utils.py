@@ -11,6 +11,7 @@ from common_code.storage.service import StorageService
 from common_code.tasks.service import TasksService
 from common_code.service.models import Service
 
+
 # Import the service defined in the other file
 from my_service import MyService
 
@@ -31,7 +32,7 @@ async def lifespan(app: FastAPI):
     # Startup
     logger = get_logger(settings)
     http_client = HttpClient()
-    storage_service = StorageService(logger)
+    storage_service = StorageService(logger, http_client)
     my_service = MyService()
     tasks_service = TasksService(logger, settings, http_client, storage_service)
     service_service = ServiceService(logger, settings, http_client, tasks_service)
@@ -51,13 +52,12 @@ async def lifespan(app: FastAPI):
                 if not announced:
                     time.sleep(settings.engine_announce_retry_delay)
                     if retries == 0:
-                        logger.warning(
-                            f"Aborting service announcement after " f"{settings.engine_announce_retries} retries"
-                        )
+                        logger.warning(f"Aborting service announcement after "
+                                       f"{settings.engine_announce_retries} retries")
 
     async def run_heartbeat(my_service: Service, interval: int = 30):
         # Get interval from settings or default to 30 seconds
-        interval = getattr(settings, "heartbeat_interval", interval)
+        interval = getattr(settings, 'heartbeat_interval', interval)
 
         while True:
             # Wait for the defined interval before sending the next ping
@@ -76,6 +76,11 @@ async def lifespan(app: FastAPI):
     heartbeat_task = asyncio.create_task(run_heartbeat(my_service, 20))
     yield
     heartbeat_task.cancel()
+
     # Shutdown
-    for engine_url in settings.engine_urls:
-        await service_service.graceful_shutdown(my_service, engine_url)
+    try:
+        for engine_url in settings.engine_urls:
+            await service_service.graceful_shutdown(my_service, engine_url)
+    finally:
+        await tasks_service.stop()
+        await http_client.aclose()
